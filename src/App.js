@@ -1,7 +1,26 @@
 import React from "react";
+import { useAppContext } from "./context";
+
+import Navbar from "./Navbar";
+import CartContainer from "./CartContainer";
 
 const App = () => {
-  return <h2>APP COMPONENT</h2>;
+  const { loading } = useAppContext();
+
+  if (loading) {
+    return (
+      <div className="loading">
+        <h1>Loading...</h1>
+      </div>
+    );
+  }
+
+  return (
+    <main>
+      <Navbar />
+      <CartContainer />
+    </main>
+  );
 };
 
 export default App;
