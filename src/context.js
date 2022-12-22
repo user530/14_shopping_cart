@@ -1,5 +1,4 @@
 import React from "react";
-import cartItems from "./data";
 import reducer from "./reducer";
 
 const url = "https://course-api.com/react-useReducer-cart-project";
@@ -8,7 +7,7 @@ const AppContext = React.createContext();
 
 const initialState = {
   loading: false,
-  cart: cartItems,
+  cart: [],
   total: 0,
   amount: 0,
 };
@@ -21,11 +20,9 @@ export const AppContextProvider = ({ children }) => {
   const removeCartItem = (id) =>
     dispatch({ type: "REMOVE_CART_ITEM", payload: { id } });
 
-  const increaseItemAmount = (id) =>
-    dispatch({ type: "INCREASE_ITEM_AMOUNT", payload: { id } });
-
-  const decreaseItemAmount = (id) =>
-    dispatch({ type: "DECREASE_ITEM_AMOUNT", payload: { id } });
+  const changeAmount = (id, type) => {
+    dispatch({ type: "CHANGE_ITEM_AMOUNT", payload: { id, type } });
+  };
 
   const fetchData = async (url) => {
     dispatch({ type: "LOAD_CART_DATA" });
@@ -50,8 +47,7 @@ export const AppContextProvider = ({ children }) => {
         ...state,
         clearCart,
         removeCartItem,
-        increaseItemAmount,
-        decreaseItemAmount,
+        changeAmount,
       }}
     >
       {children}

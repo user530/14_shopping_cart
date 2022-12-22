@@ -14,24 +14,16 @@ const reducer = (state, action) => {
       };
     }
 
-    case "INCREASE_ITEM_AMOUNT": {
-      const newCart = state.cart.map((cartItem) =>
-        cartItem.id !== action.payload.id
-          ? cartItem
-          : { ...cartItem, amount: cartItem.amount + 1 }
+    case "CHANGE_ITEM_AMOUNT": {
+      let newCart = state.cart.map((cartItem) =>
+        cartItem.id === action.payload.id
+          ? action.payload.type === "INCREASE"
+            ? { ...cartItem, amount: cartItem.amount + 1 }
+            : { ...cartItem, amount: cartItem.amount - 1 }
+          : cartItem
       );
 
-      return { ...state, cart: newCart };
-    }
-
-    case "DECREASE_ITEM_AMOUNT": {
-      const newCart = state.cart
-        .map((cartItem) =>
-          cartItem.id !== action.payload.id
-            ? cartItem
-            : { ...cartItem, amount: cartItem.amount - 1 }
-        )
-        .filter((cartItem) => cartItem.amount > 0);
+      newCart = newCart.filter((cartItem) => cartItem.amount > 0);
 
       return { ...state, cart: newCart };
     }
@@ -57,9 +49,10 @@ const reducer = (state, action) => {
 
     case "DISPLAY_CART_ITEMS":
       return { ...state, cart: action.payload.cart, loading: false };
-  }
 
-  return state;
+    default:
+      throw new Error("Reducer Error: No matching action type!");
+  }
 };
 
 export default reducer;
